@@ -1,0 +1,27 @@
+[project]
+name = "upwork_agent"
+version = "0.1.0"
+description = "upwork_agent using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools,anthropic]==1.14.4",
+    "litellm",
+    "mcp>=1.2.0",
+]
+
+[project.scripts]
+chat = "upwork_agent.main:chat"
+kickoff = "upwork_agent.main:chat"
+run_crew = "upwork_agent.main:chat"
+login = "upwork_agent.main:login"
+logout = "upwork_agent.main:logout"
+setup = "upwork_agent.main:setup"
+smoke = "upwork_agent.smoke_test:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "flow"
