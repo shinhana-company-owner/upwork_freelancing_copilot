@@ -1,5 +1,10 @@
 # Upwork Copilot
 
+> 🖥️ **Claude Code only.** This plugin needs a local shell: its skill runs a
+> bundled Python CLI (`install.sh` → local virtualenv → browser OAuth → token
+> cached under `~/.upwork_copilot/`). It is **not supported on claude.ai or
+> Cowork**, which have no local environment to run it.
+
 A Claude plugin that helps a freelancer work smarter on Upwork. It lets the Claude
 host model **find and quality-score jobs** (flagging ghost/scam posts), **vet
 clients**, and **draft proposals and cover letters** grounded in your real Upwork
