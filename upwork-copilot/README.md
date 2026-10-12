@@ -6,7 +6,7 @@
 > Cowork**, which have no local environment to run it.
 
 A Claude plugin that helps a freelancer work smarter on Upwork. It lets the Claude
-host model **find and quality-score jobs** (flagging ghost/scam posts), **vet
+host model **find and quality-score jobs** (flagging ghost/scam posts) to avoid burning and wasting Connects, **vet
 clients**, and **draft proposals and cover letters** grounded in your real Upwork
 profile — plus quick status checks on proposals, messages, contracts, Connects
 balance, and earnings.
