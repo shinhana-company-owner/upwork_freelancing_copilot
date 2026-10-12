@@ -29,16 +29,21 @@ SRC = ROOT / "src" / "upwork_agent"
 DEST = ROOT / "upwork-copilot" / "skills" / "upwork-copilot" / "scripts" / "upwork_agent"
 
 # The exact closure the skill CLI needs — nothing from the LLM/agent side.
+# These are copied verbatim from src/ and kept in sync by this script.
 SKILL_MODULES = [
     "__init__.py",
-    "config.py",
     "scoring.py",
     "auth.py",
     "upwork_client.py",
     "queries.py",
     "skill_cli.py",
 ]
-_ALLOWED = {m[:-3] for m in SKILL_MODULES if m.endswith(".py")}
+# config.py is intentionally NOT generated: the skill ships a slimmed, LLM-free,
+# credential-free config that diverges from the full app's src/upwork_agent/config.py
+# (no MODEL/LLM_MAX_TOKENS, no static UPWORK_MCP_TOKEN env read). It is still part
+# of the import closure, so keep its name allowed.
+LOCAL_MODULES = {"config"}
+_ALLOWED = {m[:-3] for m in SKILL_MODULES if m.endswith(".py")} | LOCAL_MODULES
 
 
 def _internal_imports(path: Path) -> set[str]:

@@ -29,15 +29,17 @@ and nothing else.
 
 ## Authentication & credential handling
 
+- **The skill reads no credential from the environment or from your files.** It
+  does not read any `*_TOKEN`/API-key environment variable; the only way it obtains
+  a token is the interactive browser login below.
 - Login uses the **MCP authorization spec**: Dynamic Client Registration
   (RFC 7591) + PKCE, with tokens bound to the MCP resource (RFC 8707). There is no
   shipped client id/secret and no manually-created Upwork API key.
 - `login` opens your browser to Upwork's own authorize page; the OAuth redirect is
   caught on a loopback address (`http://127.0.0.1:8723/callback`).
-- Cached locally under `~/.upwork_copilot/` (override with env vars):
+- Cached locally under `~/.upwork_copilot/`:
   - `tokens.json` — access/refresh tokens, written mode `0600`.
   - `client.json` — the registered OAuth client, mode `0600`.
-  - `config.env` — optional per-user config.
 - Tokens refresh automatically and can be cleared with
   `... skill_cli logout`.
 
@@ -59,10 +61,13 @@ so the plugin cannot take irreversible or Connect-spending actions on your behal
 
 ## Supply chain
 
-The bundled Python in `skills/upwork-copilot/scripts/upwork_agent/` is **generated**
-from the canonical source (`src/upwork_agent/` in the parent project) by
-`build_skill.py`, which also verifies the bundle imports nothing outside the
-no-LLM closure. Run `python build_skill.py --check` to confirm the bundle matches
+Most of the bundled Python in `skills/upwork-copilot/scripts/upwork_agent/` is
+**generated** from the canonical source (`src/upwork_agent/` in the parent project)
+by `build_skill.py`, which also verifies the bundle imports nothing outside the
+no-LLM closure. The one exception is `config.py`, which is **hand-maintained for the
+skill** — a slimmed, LLM-free, credential-free config that intentionally diverges
+from the app's source (no `MODEL`/`LLM_MAX_TOKENS`, no static `UPWORK_MCP_TOKEN` env
+read). Run `python build_skill.py --check` to confirm the bundle matches
 source. No secrets are committed; auth artifacts live only in `~/.upwork_copilot/`.
 
 ## Your responsibilities

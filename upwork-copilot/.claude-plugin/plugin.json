@@ -17,5 +17,6 @@
     "mcp"
   ],
   "homepage": "https://github.com/shinhana-company-owner/upwork_freelancing_copilot/tree/main/upwork-copilot",
-  "repository": "https://github.com/shinhana-company-owner/upwork_freelancing_copilot"
+  "repository": "https://github.com/shinhana-company-owner/upwork_freelancing_copilot",
+  "license": "MIT"
 }

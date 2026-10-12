@@ -85,4 +85,7 @@ The parent repo also ships a **standalone** version (`uv run chat`) that bundles
 its own LLM for users who want a self-contained CLI. This skill uses the exact
 same data layer — the Python under `scripts/upwork_agent/` is a copy generated
 from the repo's `src/upwork_agent/` by `build_skill.py` (don't hand-edit it; fix
-the source and re-run the sync). The skill just lets *you* be the model instead.
+the source and re-run the sync). The one exception is `config.py`, which is
+hand-maintained for the skill: a slimmed, LLM-free, credential-free config (no
+`MODEL`/`LLM_MAX_TOKENS`, no static token env read). The skill just lets *you* be
+the model instead.
