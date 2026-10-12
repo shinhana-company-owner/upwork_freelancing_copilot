@@ -1,6 +1,6 @@
 {
   "name": "upwork-copilot",
-  "description": "Find and quality-score Upwork jobs (flagging ghost/scam posts), vet clients, and draft profile-grounded proposals. Read/draft-only: never submits proposals, sends messages, or spends Connects. Claude Code only (needs a local shell).",
+  "description": "Find and quality-score Upwork jobs (flagging ghost/scam posts) to avoid burning and wasting Connects, vet clients, and draft profile-grounded proposals. Read/draft-only: never submits proposals, sends messages, or spends Connects. Claude Code only (needs a local shell).",
   "version": "0.1.0",
   "author": {
     "name": "Thai Tran",
