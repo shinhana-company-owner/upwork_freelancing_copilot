@@ -36,15 +36,15 @@ provides data and scoring; Claude does the reasoning, writing, and presentation.
 
 ### 1. Add the marketplace and install the plugin
 
-This repo is itself a single-plugin marketplace, so you can add it directly:
+This plugin is published through the **ShinHana marketplace**:
 
 ```text
-/plugin marketplace add pf2707/upwork-copilot      # or the full git URL
-/plugin install upwork-copilot@upwork-copilot-marketplace
+/plugin marketplace add pf2707/agentic_plugin_mobile_workflow
+/plugin install upwork-copilot@shinhana-marketplace
 ```
 
-(Already have the ShinHana marketplace? You can instead add this plugin as a
-second entry in that marketplace's `marketplace.json`.)
+(The plugin itself lives at `github.com/shinhana-company-owner/upwork_freelancing_copilot`;
+the marketplace references it by a GitHub source, so you don't add that repo directly.)
 
 ### 2. One-time skill setup (builds the CLI venv + logs in)
 
