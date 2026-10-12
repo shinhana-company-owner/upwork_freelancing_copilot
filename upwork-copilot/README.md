@@ -13,7 +13,8 @@ balance, and earnings.
 
 It is deliberately **read/draft-only**: it never submits proposals, sends
 messages, or spends Connects. You stay in control (draft-and-confirm). See
-[SECURITY.md](./SECURITY.md) for the full trust model.
+[SECURITY.md](./SECURITY.md) for the full trust model and
+[Privacy](./PRIVACY.md) for what data is handled.
 
 > ⚠️ Use responsibly. Automating access to your Upwork account may be subject to
 > Upwork's Terms of Service and API/MCP terms. You are responsible for compliant
