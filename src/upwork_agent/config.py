@@ -10,12 +10,6 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-def _as_bool(value: str | None, default: bool = False) -> bool:
-    if value is None:
-        return default
-    return value.strip().lower() in {"1", "true", "yes", "on"}
-
-
 def _as_int(value: str | None, default: int) -> int:
     try:
         return int(value) if value else default
@@ -39,11 +33,6 @@ class Settings:
     # bearer. Normal users authenticate via the browser OAuth flow instead.
     upwork_token: str | None = os.getenv("UPWORK_MCP_TOKEN") or None
 
-    # Force the local mock MCP server (no account, no Connects spent).
-    mock_mode: bool = _as_bool(os.getenv("UPWORK_MOCK"), default=False)
-    # Raw value, so we can tell "UPWORK_MOCK=false" (go live) from "unset" (default mock).
-    mock_env_raw: str | None = os.getenv("UPWORK_MOCK")
-
     # --- OAuth (browser login to the user's own Upwork account) ---
     # No manual client id/secret: the app self-registers via Dynamic Client
     # Registration. A manual /developer/keys/apply key does NOT work (its tokens
@@ -54,22 +43,15 @@ class Settings:
 
     @property
     def auth_mode(self) -> str:
-        """How we talk to Upwork: 'mock' | 'static' | 'oauth'.
+        """How we talk to the live Upwork MCP: 'static' | 'oauth'.
 
-        OAuth uses Dynamic Client Registration, so it needs no pre-set client id —
-        setting UPWORK_MOCK=false is enough to go live.
+        OAuth (the default) uses Dynamic Client Registration, so it needs no
+        pre-set client id — the user just logs in through the browser. A
+        pre-obtained UPWORK_MCP_TOKEN switches to 'static'.
         """
-        if self.mock_mode:
-            return "mock"
         if self.upwork_token:
             return "static"
-        if self.mock_env_raw is not None:
-            return "oauth"
-        return "mock"
-
-    @property
-    def use_mock(self) -> bool:
-        return self.auth_mode == "mock"
+        return "oauth"
 
     @property
     def redirect_uri(self) -> str:
@@ -97,10 +79,6 @@ class Settings:
         if override:
             return Path(override).expanduser()
         return Path.home() / ".upwork_copilot" / "client.json"
-
-    @property
-    def mock_server_path(self) -> str:
-        return str(Path(__file__).with_name("mock_upwork_mcp.py"))
 
 
 settings = Settings()

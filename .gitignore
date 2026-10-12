@@ -2,3 +2,9 @@
 __pycache__/
 lib/
 .DS_Store
+
+# Virtualenvs / caches (repo root and the self-contained skill bundle)
+.venv/
+upwork-copilot/.venv/
+upwork-copilot/.uv-cache/
+*.egg-info/

@@ -12,7 +12,6 @@ import os
 from crewai import Agent, LLM
 
 from .config import settings
-from .mcp_config import upwork_mcp
 from .tools.scoring_tool import score_and_rank_jobs
 
 
@@ -93,35 +92,30 @@ recommendation (apply / skip / follow up) rather than just dumping data.\
 def build_copilot(org_uid: str | None = None) -> Agent:
     """The main chat agent + scoring.
 
-    Live mode uses simple, pre-built wrapper tools (upwork_tools) that handle
-    Upwork's nested tool schemas internally — far more reliable than exposing the
-    32 raw MCP tools to the model. Mock mode uses the local mock MCP server.
+    Uses simple, pre-built wrapper tools (upwork_tools) that handle Upwork's
+    nested tool schemas internally — far more reliable than exposing the 32 raw
+    MCP tools to the model.
     """
-    tools = [score_and_rank_jobs]
-    mcps: list = []
+    from .tools.upwork_tools import (
+        find_upwork_jobs,
+        upwork_contracts,
+        upwork_dashboard,
+        upwork_messages,
+        upwork_my_profile,
+        upwork_my_proposals,
+    )
+    from .upwork_client import set_org_uid
 
-    if settings.use_mock:
-        mcps = [upwork_mcp()]
-    else:
-        from .tools.upwork_tools import (
-            find_upwork_jobs,
-            upwork_contracts,
-            upwork_dashboard,
-            upwork_messages,
-            upwork_my_profile,
-            upwork_my_proposals,
-        )
-        from .upwork_client import set_org_uid
-
-        set_org_uid(org_uid)
-        tools += [
-            find_upwork_jobs,
-            upwork_my_profile,
-            upwork_dashboard,
-            upwork_my_proposals,
-            upwork_messages,
-            upwork_contracts,
-        ]
+    set_org_uid(org_uid)
+    tools = [
+        score_and_rank_jobs,
+        find_upwork_jobs,
+        upwork_my_profile,
+        upwork_dashboard,
+        upwork_my_proposals,
+        upwork_messages,
+        upwork_contracts,
+    ]
 
     return Agent(
         role="Upwork Freelancing Copilot",
@@ -133,7 +127,6 @@ def build_copilot(org_uid: str | None = None) -> Agent:
         backstory=COPILOT_BACKSTORY,
         llm=build_llm(),
         tools=tools,
-        mcps=mcps,
-        verbose=settings.mock_mode,  # chatty only in explicit mock/dev mode
+        verbose=bool(os.getenv("UPWORK_VERBOSE")),  # opt-in dev chattiness
         max_iter=15,
     )

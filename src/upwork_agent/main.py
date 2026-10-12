@@ -3,8 +3,8 @@
 
 Run with:  crewai run     (or)   uv run chat
 
-Each turn calls the copilot agent, which has the Upwork MCP (live or mock) plus
-the deterministic job scorer. Conversation history is kept in-process so you can
+Each turn calls the copilot agent, which has the live Upwork MCP tools plus the
+deterministic job scorer. Conversation history is kept in-process so you can
 have a back-and-forth ("find me RAG jobs" -> "draft a proposal for #1").
 """
 from __future__ import annotations
@@ -298,29 +298,27 @@ def chat() -> None:
     # Pre-flight the live connection so auth failures are legible (not a wall of
     # async tracebacks) and we don't enter the loop with a broken connection.
     org_uid: str | None = None
-    if settings.auth_mode != "mock":
-        from .auth import AuthError, get_access_token
-        from .health import check_live_connection, get_org_uid
+    from .auth import AuthError, get_access_token
+    from .health import check_live_connection, get_org_uid
 
-        try:
-            token = get_access_token(interactive=True)  # browser login if needed
-        except AuthError as e:
-            print(f"\n⚠  Upwork login failed: {e}")
-            return
+    try:
+        token = get_access_token(interactive=True)  # browser login if needed
+    except AuthError as e:
+        print(f"\n⚠  Upwork login failed: {e}")
+        return
 
-        print("\nChecking the Upwork MCP connection…")
-        ok, detail = check_live_connection(settings.upwork_mcp_url, token)
-        if not ok:
-            print(f"⚠  Could not connect to the live Upwork MCP: {detail}\n")
-            print("   Try `logout` then `login` for a fresh token. If a 401")
-            print("   persists, the token isn't accepted by the MCP for this")
-            print("   account/app — see the README 'Live connection' notes.")
-            print("   To keep working now, set UPWORK_MOCK=true in .env.")
-            return
-        print(f"✓ Connected — {len(detail)} Upwork tools available.")
-        org_uid = get_org_uid(settings.upwork_mcp_url, token)
-        if org_uid:
-            print(f"✓ Account resolved (org_uid …{org_uid[-6:]}).")
+    print("\nChecking the Upwork MCP connection…")
+    ok, detail = check_live_connection(settings.upwork_mcp_url, token)
+    if not ok:
+        print(f"⚠  Could not connect to the live Upwork MCP: {detail}\n")
+        print("   Try `logout` then `login` for a fresh token. If a 401")
+        print("   persists, the token isn't accepted by the MCP for this")
+        print("   account/app — see the README 'Live connection' notes.")
+        return
+    print(f"✓ Connected — {len(detail)} Upwork tools available.")
+    org_uid = get_org_uid(settings.upwork_mcp_url, token)
+    if org_uid:
+        print(f"✓ Account resolved (org_uid …{org_uid[-6:]}).")
 
     print("\n" + HELP + "\n")
 
@@ -364,13 +362,6 @@ def chat() -> None:
 
 def login() -> None:
     """Force a fresh browser login to Upwork and cache the token."""
-    if settings.use_mock:
-        print(
-            "Running in MOCK mode — no Upwork login needed.\n"
-            "To connect a real account, set UPWORK_MOCK=false in .env, then run"
-            " `uv run login` again."
-        )
-        return
     if settings.auth_mode == "static":
         print("A static UPWORK_MCP_TOKEN is configured — OAuth login is not used.")
         return

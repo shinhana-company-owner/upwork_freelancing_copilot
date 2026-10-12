@@ -1,0 +1,19 @@
+{
+  "name": "upwork-copilot",
+  "description": "Find and quality-score Upwork jobs (flagging ghost/scam posts), vet clients, and draft profile-grounded proposals. Read/draft-only: never submits proposals, sends messages, or spends Connects.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Thai Tran",
+    "email": "pf2707@gmail.com"
+  },
+  "keywords": [
+    "upwork",
+    "freelance",
+    "jobs",
+    "proposals",
+    "cover-letter",
+    "job-scoring",
+    "client-vetting",
+    "mcp"
+  ]
+}

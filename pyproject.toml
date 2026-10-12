@@ -17,7 +17,7 @@ run_crew = "upwork_agent.main:chat"
 login = "upwork_agent.main:login"
 logout = "upwork_agent.main:logout"
 setup = "upwork_agent.main:setup"
-smoke = "upwork_agent.smoke_test:main"
+upwork-skill = "upwork_agent.skill_cli:main"
 
 [build-system]
 requires = ["hatchling"]
